@@ -4,6 +4,7 @@ import express, { Express, Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import "express-async-errors";
+import { ordersRouter } from "./routes/ordersRoutes";
 
 loadEnv();
 
@@ -15,6 +16,9 @@ app.use(morgan('tiny'));
 app.use(helmet());
 
 app.get("/health", (_req: Request, res: Response) => res.send("OK!"));
+
+app
+  .use("/orders", ordersRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
