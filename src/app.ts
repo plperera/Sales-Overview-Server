@@ -5,6 +5,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import "express-async-errors";
 import { ordersRouter } from "./routes/ordersRoutes";
+import { sellersRouter } from "./routes/sellersRoutes";
 
 loadEnv();
 
@@ -18,7 +19,8 @@ app.use(helmet());
 app.get("/health", (_req: Request, res: Response) => res.send("OK!"));
 
 app
-  .use("/orders", ordersRouter);
+  .use("/orders", ordersRouter)
+  .use("/sellers", sellersRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
