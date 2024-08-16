@@ -1,4 +1,4 @@
-import ordersRepository from "@/repositories/ordersRepository";
+import ordersRepository from "../repositories/ordersRepository";
 
 async function getAllOrders() {
   const result = await ordersRepository.findAllOrders();

@@ -1,4 +1,4 @@
-import { getAllSellers, getSellerById, getSellers } from '@/controllers/sellersController'
+import { getAllSellers, getSellerById, getSellers } from '../controllers/sellersController'
 import { Router } from 'express'
 
 const sellersRouter = Router()

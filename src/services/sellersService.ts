@@ -1,4 +1,4 @@
-import sellersRepository from "@/repositories/sellersRepository";
+import sellersRepository from "../repositories/sellersRepository";
 
 async function getAllSellers() {
   const result = await sellersRepository.findAllSellers();

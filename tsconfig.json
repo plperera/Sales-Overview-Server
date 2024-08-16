@@ -10,15 +10,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "plugins": [
-      {
-        "transform": "typescript-transform-paths"
-      }
-    ]
+    "baseUrl": "."
   },
   "include": ["src/**/*"], // Inclui todos os arquivos na pasta src e subpastas
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"] // Exclui node_modules e arquivos de teste

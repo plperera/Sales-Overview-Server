@@ -1,5 +1,5 @@
 
-import sellersService from "@/services/sellersService";
+import sellersService from "../services/sellersService";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 

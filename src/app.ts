@@ -1,4 +1,4 @@
-import { loadEnv } from "@/config";
+import { loadEnv } from "./config/envs";
 import cors from "cors";
 import express, { Express, Request, Response, NextFunction } from "express";
 import morgan from "morgan";
