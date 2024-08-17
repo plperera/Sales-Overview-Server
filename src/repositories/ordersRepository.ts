@@ -1,3 +1,4 @@
+import { Country } from "@prisma/client";
 import { prisma } from "../config/database";
 
 async function findAllOrders() {
@@ -21,19 +22,34 @@ async function findOrderById(orderId: number) {
   return result;
 }
 
-async function findOrdersWithPagination(page: number, pageSize: number) {
+async function findOrdersWithPagination(page: number, pageSize: number, sellerId?: number, country?: Country) {
   const orders = await prisma.order.findMany({
     skip: (page - 1) * pageSize,
     take: pageSize,
-    include:{
-      seller: true
-    }
+    where: {
+      AND: [
+        sellerId ? { sellerId: sellerId } : {},
+        country ? { country: country } : {},
+      ],
+    },
+    include: {
+      seller: true,
+    },
   });
+
   return orders;
 }
 
-async function countRecords() {
-  const totalRecords = await prisma.order.count();
+async function countRecords(sellerId?: number, country?: Country) {
+  const totalRecords = await prisma.order.count({
+    where: {
+      AND: [
+        sellerId ? { sellerId: sellerId } : {},
+        country ? { country: country } : {},
+      ],
+    },
+  });
+
   return totalRecords;
 }
 

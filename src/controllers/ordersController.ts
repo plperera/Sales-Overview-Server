@@ -1,3 +1,4 @@
+import { Country } from "@prisma/client";
 import ordersService from "../services/ordersService";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
@@ -57,18 +58,26 @@ export async function getOrderById(req: Request, res: Response) {
 
 export async function getOrdersWithPagination(req: Request, res: Response) {
   try {
-
     const page = parseInt(req.query.page as string, 10) || 1;
     const pageSize = parseInt(req.query.pageSize as string, 10) || 10;
-      
-    const paginatedOrders = await ordersService.getOrdersWithPagination(page, pageSize);
+    
+    const country = req.query.country as string | undefined;
+    if (country && !Object.values(Country).includes(country as Country)) {
+      return res.status(httpStatus.BAD_REQUEST).send({ error: "Invalid country value" });
+    }
 
-    if(!paginatedOrders){
+    const sellerId = req.query.sellerId ? parseInt(req.query.sellerId as string, 10) : undefined;
+    if (sellerId && isNaN(sellerId)) {
+      return res.status(httpStatus.BAD_REQUEST).send({ error: "Invalid sellerId value" });
+    }
+
+    const paginatedOrders = await ordersService.getOrdersWithPagination(page, pageSize, sellerId, country as Country | undefined);
+
+    if (!paginatedOrders) {
       return res.sendStatus(httpStatus.NOT_FOUND);
     }
-    
-    return res.send(paginatedOrders).status(httpStatus.OK);
 
+    return res.status(httpStatus.OK).send(paginatedOrders);
   } catch (error) {
     console.log(error);
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
