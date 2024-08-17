@@ -1,13 +1,13 @@
 import { prisma } from "../config/database";
 
 async function findAllOrders() {
-  const result = await prisma.order.findMany()
+  const result = await prisma.order.findMany();
   return result;
 }
 
 async function findOrders(amount: number) {
   const result = await prisma.order.findMany({
-    take: amount
+    take: amount,
   });
   return result;
 }
@@ -15,16 +15,34 @@ async function findOrders(amount: number) {
 async function findOrderById(orderId: number) {
   const result = await prisma.order.findUnique({
     where: {
-      orderId: orderId
-    }
+      orderId: orderId,
+    },
   });
   return result;
+}
+
+async function findOrdersWithPagination(page: number, pageSize: number) {
+  const orders = await prisma.order.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    include:{
+      seller: true
+    }
+  });
+  return orders;
+}
+
+async function countRecords() {
+  const totalRecords = await prisma.order.count();
+  return totalRecords;
 }
 
 const ordersRepository = {
   findAllOrders,
   findOrders,
-  findOrderById
+  findOrderById,
+  findOrdersWithPagination,
+  countRecords
 };
 
 export default ordersRepository;

@@ -55,3 +55,23 @@ export async function getOrderById(req: Request, res: Response) {
   }
 }
 
+export async function getOrdersWithPagination(req: Request, res: Response) {
+  try {
+
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const pageSize = parseInt(req.query.pageSize as string, 10) || 10;
+      
+    const paginatedOrders = await ordersService.getOrdersWithPagination(page, pageSize);
+
+    if(!paginatedOrders){
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+    
+    return res.send(paginatedOrders).status(httpStatus.OK);
+
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
