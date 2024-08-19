@@ -21,10 +21,41 @@ async function findSellerById(sellerId: number) {
   return result;
 }
 
+async function findManySellersById(sellerIds: number[]) {
+  const result = await prisma.seller.findMany({
+    where: {
+      id: { in: sellerIds },
+    },
+  });
+  return result;
+}
+
+async function findTopSellers(takeNumber: number) {
+  const result = await prisma.order.groupBy({
+    by: ['sellerId'],
+    _sum: {
+      price: true,
+    },
+    _count: {
+      orderId: true,
+    },
+    orderBy: {
+      _sum: {
+        price: 'desc',
+      },
+    },
+    take: takeNumber,
+  });
+
+  return result
+}
+
 const sellersRepository = {
   findAllSellers,
   findSellers,
-  findSellerById
+  findSellerById,
+  findTopSellers,
+  findManySellersById
 };
 
 export default sellersRepository;

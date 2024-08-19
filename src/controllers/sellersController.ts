@@ -56,3 +56,16 @@ export async function getSellerById(req: Request, res: Response) {
   }
 }
 
+export async function getTopSellers(req: Request, res: Response) {
+  try {  
+
+    const topSellers = await sellersService.getTopSellers();
+    
+    return res.send(topSellers).status(httpStatus.OK);
+
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
