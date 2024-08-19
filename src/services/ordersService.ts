@@ -28,10 +28,11 @@ async function getOrderById(amount: number) {
   const result = await ordersRepository.findOrderById(amount);
   return result;
 }
-async function getOrdersWithPagination(page: number, pageSize: number, sellerId?: number, country?: Country) {
+async function getOrdersWithPagination(page: number, pageSize: number, sellerId?: number, country?: Country, orderColumn?: string,  orderDirection?: string) {
+
   const totalRecords = await ordersRepository.countRecords(sellerId, country);
   const totalPages = Math.ceil(totalRecords / pageSize);
-  const orders = await ordersRepository.findOrdersWithPagination(page, pageSize, sellerId, country);
+  const orders = await ordersRepository.findOrdersWithPagination(page, pageSize, sellerId, country, orderColumn, orderDirection);
 
   return {
     first: 1,

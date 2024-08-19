@@ -60,18 +60,19 @@ export async function getOrdersWithPagination(req: Request, res: Response) {
   try {
     const page = parseInt(req.query.page as string, 10) || 1;
     const pageSize = parseInt(req.query.pageSize as string, 10) || 10;
-    
     const country = req.query.country as string | undefined;
-    if (country && !Object.values(Country).includes(country as Country)) {
-      return res.status(httpStatus.BAD_REQUEST).send({ error: "Invalid country value" });
-    }
-
     const sellerId = req.query.sellerId ? parseInt(req.query.sellerId as string, 10) : undefined;
-    if (sellerId && isNaN(sellerId)) {
-      return res.status(httpStatus.BAD_REQUEST).send({ error: "Invalid sellerId value" });
-    }
+    const orderColumn = req.query.orderColumn as string | undefined;
+    const orderDirection = req.query.orderDirection as string | undefined;  
 
-    const paginatedOrders = await ordersService.getOrdersWithPagination(page, pageSize, sellerId, country as Country | undefined);
+    const paginatedOrders = await ordersService.getOrdersWithPagination(
+      page, 
+      pageSize, 
+      sellerId, 
+      country as Country | undefined, 
+      orderColumn,
+      orderDirection
+    );
 
     if (!paginatedOrders) {
       return res.sendStatus(httpStatus.NOT_FOUND);

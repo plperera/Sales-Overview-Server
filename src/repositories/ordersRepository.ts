@@ -1,4 +1,4 @@
-import { Country } from "@prisma/client";
+import { Country, Prisma } from "@prisma/client";
 import { prisma } from "../config/database";
 
 async function findAllOrders() {
@@ -22,7 +22,32 @@ async function findOrderById(orderId: number) {
   return result;
 }
 
-async function findOrdersWithPagination(page: number, pageSize: number, sellerId?: number, country?: Country) {
+async function findOrdersWithPagination(
+  page: number, 
+  pageSize: number, 
+  sellerId?: number, 
+  country?: Country, 
+  orderColumn?: string,  
+  orderDirection?: string
+) {
+
+  const sortOrder: Prisma.SortOrder = orderDirection === 'asc' ? 'asc' : 'desc';
+
+  let orderBy;
+  if (orderColumn && orderDirection) {
+    if (orderColumn === 'seller') {
+      orderBy = {
+        seller: {
+          name: sortOrder,
+        },
+      };
+    } else {
+      orderBy = {
+        [orderColumn]: sortOrder,
+      };
+    }
+  }
+
   const orders = await prisma.order.findMany({
     skip: (page - 1) * pageSize,
     take: pageSize,
@@ -32,6 +57,7 @@ async function findOrdersWithPagination(page: number, pageSize: number, sellerId
         country ? { country: country } : {},
       ],
     },
+    orderBy,
     include: {
       seller: true,
     },
