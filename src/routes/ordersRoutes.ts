@@ -1,4 +1,4 @@
-import { validateQueryParams } from 'src/middlewares/validateQueryParams'
+import { validateQueryParams } from '../middlewares/validateQueryParams'
 import { getAllOrders, getOrderById, getOrders, getOrdersWithPagination } from '../controllers/ordersController'
 import { Router } from 'express'
 
