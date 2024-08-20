@@ -12,6 +12,7 @@ function FormatOrder(order: OrderWithSeller[]) {
     price: e.price,
     product: e.product,
     seller: e.seller.name,
+    sellerId: e.sellerId
   }));
   return newFormat;
 }
