@@ -6,7 +6,8 @@ const sellersRouter = Router()
 sellersRouter
   .get("/all", getAllSellers)
   .get("/top", getTopSellers)
+  .get("/unique/:sellerId", getSellerById)
   //.get("/", getSellers)
-  //.get("/:sellerId", getSellerById)
+  
 
 export { sellersRouter }

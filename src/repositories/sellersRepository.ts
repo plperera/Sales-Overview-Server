@@ -12,10 +12,13 @@ async function findSellers(amount: number) {
   return result;
 }
 
-async function findSellerById(sellerId: number) {
+async function findSellerWithOrderById(sellerId: number) {
   const result = await prisma.seller.findUnique({
     where: {
       id: sellerId
+    },
+    include: {
+      Order: true
     }
   });
   return result;
@@ -53,7 +56,7 @@ async function findTopSellers(takeNumber: number) {
 const sellersRepository = {
   findAllSellers,
   findSellers,
-  findSellerById,
+  findSellerWithOrderById,
   findTopSellers,
   findManySellersById
 };

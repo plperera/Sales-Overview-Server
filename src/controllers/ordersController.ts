@@ -78,7 +78,7 @@ export async function getOrdersWithPagination(req: Request, res: Response) {
       return res.sendStatus(httpStatus.NOT_FOUND);
     }
 
-    return res.status(httpStatus.OK).send(paginatedOrders);
+    return res.send(paginatedOrders).status(httpStatus.OK);
   } catch (error) {
     console.log(error);
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);

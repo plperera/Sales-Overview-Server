@@ -1,4 +1,9 @@
+import { Country, Order, Seller } from "@prisma/client";
 import sellersRepository from "../repositories/sellersRepository";
+
+type SellerWithOrder = Seller & {
+  Order: Order[];
+};
 
 async function getAllSellers() {
   const result = await sellersRepository.findAllSellers();
@@ -8,8 +13,8 @@ async function getSellers(amount: number) {
   const result = await sellersRepository.findSellers(amount);
   return result;
 }
-async function getSellerById(sellerId: number) {
-  const result = await sellersRepository.findSellerById(sellerId);
+async function getSellerWithOrderById(sellerId: number) {
+  const result = await sellersRepository.findSellerWithOrderById(sellerId);
   return result;
 }
 async function getTopSellers() {
@@ -31,12 +36,60 @@ async function getTopSellers() {
 
   return result
 }
+function convertData(body: SellerWithOrder) {
+  const totalSales = body.Order.length;
+  const totalValue = body.Order.reduce((acc, order) => acc + order.price, 0);
+
+  const salesByCountry = body.Order.reduce((acc, order) => {
+    const country = acc.find((c) => c.name === order.country);
+    if (country) {
+      country.amount += order.price;
+    } else {
+      acc.push({
+        name: order.country,
+        amount: order.price,
+        color: getColorByCountry(order.country),
+      });
+    }
+    return acc;
+  }, [] as { name: string; amount: number; color: string }[])
+  .sort((a, b) => b.amount - a.amount); // Ordenação do maior para o menor
+
+  const topProducts = body.Order.reduce((acc, order) => {
+    const product = acc.find((p) => p.name === order.product);
+    if (product) {
+      product.sales += 1;
+    } else {
+      acc.push({ name: order.product, sales: 1 });
+    }
+    return acc;
+  }, [] as { name: string; sales: number }[]).sort((a, b) => b.sales - a.sales).slice(0, 3);
+
+  return {
+    name: body.name,
+    totalSales,
+    totalValue,
+    salesByCountry,
+    topProducts,
+  };
+}
+
+const getColorByCountry = (country: Country) => {
+  const colors = {
+    BRA: '#36A0DD',
+    ARG: '#9452FF',
+    MEX: '#DD36AB',
+  };
+
+  return colors[country] || '#000000';
+};
 
 const sellersService = {
   getAllSellers,
   getSellers,
-  getSellerById,
-  getTopSellers
+  getSellerWithOrderById,
+  getTopSellers,
+  convertData
 };
 
 export default sellersService;

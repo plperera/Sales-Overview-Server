@@ -41,14 +41,16 @@ export async function getSellerById(req: Request, res: Response) {
     if (isNaN(Number(sellerId))) {
       return res.sendStatus(httpStatus.BAD_REQUEST);
     }
-  
-    const uniqueSeller = await sellersService.getSellerById(Number(sellerId));
 
-    if(!uniqueSeller){
+    const hasSeller = await sellersService.getSellerWithOrderById(Number(sellerId));
+    
+    if(!hasSeller){
       return res.sendStatus(httpStatus.NOT_FOUND);
     }
+
+    const sellerData = sellersService.convertData(hasSeller)
     
-    return res.send(uniqueSeller).status(httpStatus.OK);
+    return res.send(sellerData).status(httpStatus.OK);
 
   } catch (error) {
     console.log(error);
