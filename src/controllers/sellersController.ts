@@ -70,4 +70,3 @@ export async function getTopSellers(req: Request, res: Response) {
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
-

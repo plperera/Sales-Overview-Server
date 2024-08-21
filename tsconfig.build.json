@@ -1,8 +1,10 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "noEmit": false // Garante que a compilação emite arquivos
-    },
-    "exclude": ["src/**/*.{spec,test}.ts", "tests"] // Exclui arquivos de teste e a pasta de testes
-  }
-  
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false
+  },
+  "exclude": [
+    "src/**/*.{spec,test}.ts",
+    "tests"
+  ]
+}

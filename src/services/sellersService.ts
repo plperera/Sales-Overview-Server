@@ -18,14 +18,15 @@ async function getSellerWithOrderById(sellerId: number) {
   return result;
 }
 async function getTopSellers() {
+
   const topSellers = await sellersRepository.findTopSellers(3);
-
   const sellerIds = topSellers.map(slr => slr.sellerId);
-
   const sellersData = await sellersRepository.findManySellersById(sellerIds)
 
   const result = topSellers.map(e => {
+
     const seller = sellersData.find(seller => seller.id === e.sellerId);
+
     return {
       totalSales: e._sum.price ? (e._sum.price / 100) : (null),
       sales: e._count.orderId,
@@ -37,6 +38,7 @@ async function getTopSellers() {
   return result
 }
 function convertData(body: SellerWithOrder) {
+
   const totalSales = body.Order.length;
   const totalValue = body.Order.reduce((acc, order) => acc + (order.price / 100), 0);
 

@@ -84,4 +84,3 @@ export async function getOrdersWithPagination(req: Request, res: Response) {
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
-
