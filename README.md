@@ -339,8 +339,8 @@ This will delete all existing data in the `orders` and `sellers` tables and inse
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/plperera/development-test-rtb-house.git
-   cd development-test-rtb-house
+   git clone https://github.com/plperera/Sales-Overview-Server.git
+   cd Sales-Overview-Server
    ```
 
 2. **Install dependencies:**
