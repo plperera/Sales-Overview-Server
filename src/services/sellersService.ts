@@ -27,7 +27,7 @@ async function getTopSellers() {
   const result = topSellers.map(e => {
     const seller = sellersData.find(seller => seller.id === e.sellerId);
     return {
-      totalSales: e._sum.price,
+      totalSales: e._sum.price ? (e._sum.price / 100) : (null),
       sales: e._count.orderId,
       sellerId: seller?.id,
       sellerName: seller?.name,
@@ -38,22 +38,22 @@ async function getTopSellers() {
 }
 function convertData(body: SellerWithOrder) {
   const totalSales = body.Order.length;
-  const totalValue = body.Order.reduce((acc, order) => acc + order.price, 0);
+  const totalValue = body.Order.reduce((acc, order) => acc + (order.price / 100), 0);
 
   const salesByCountry = body.Order.reduce((acc, order) => {
     const country = acc.find((c) => c.name === order.country);
     if (country) {
-      country.amount += order.price;
+      country.amount += order.price / 100;
     } else {
       acc.push({
         name: order.country,
-        amount: order.price,
+        amount: order.price / 100,
         color: getColorByCountry(order.country),
       });
     }
     return acc;
   }, [] as { name: string; amount: number; color: string }[])
-  .sort((a, b) => b.amount - a.amount); // Ordenação do maior para o menor
+  .sort((a, b) => b.amount - a.amount);
 
   const topProducts = body.Order.reduce((acc, order) => {
     const product = acc.find((p) => p.name === order.product);
